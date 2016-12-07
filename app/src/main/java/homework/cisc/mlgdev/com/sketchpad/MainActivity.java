@@ -1,13 +1,14 @@
 package homework.cisc.mlgdev.com.sketchpad;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
@@ -16,9 +17,11 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     DrawingView drawingView;
 
-    Button buttonClear, buttonColor, buttonBrushSize;
+    Button buttonClear, buttonColor, buttonBrushSize, buttonCamera;
 
     ToggleButton toggleErase;
 
@@ -47,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonBrushSize = (Button) findViewById(R.id.buttonBrushSize);
         buttonBrushSize.setOnClickListener(this);
+
+        buttonCamera = (Button) findViewById(R.id.buttonCamera);
+        buttonCamera.setOnClickListener(this);
 
         toggleErase = (ToggleButton) findViewById(R.id.toggleErase);
         toggleErase.setOnClickListener(this);
@@ -95,6 +101,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.buttonBrushSize:
                 ShowSizeDialog();
+                break;
+            case R.id.buttonCamera:
+                dispatchTakePictureIntent();
+                break;
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
 

@@ -56,9 +56,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonColor"
-        android:minWidth="48dip"
+        android:minWidth="40dip"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/buttonClear"
-        android:layout_toEndOf="@+id/buttonClear" />
+        android:layout_toEndOf="@+id/buttonClear"
+        android:minHeight="40dip" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/buttonCamera"
+        android:minWidth="40dip"
+        android:layout_alignBottom="@+id/drawingView"
+        android:layout_toRightOf="@+id/buttonBrushSize"
+        android:minHeight="40dip"
+        android:background="@android:drawable/ic_menu_camera" />
 
 </RelativeLayout>
