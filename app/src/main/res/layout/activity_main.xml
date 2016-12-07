@@ -43,15 +43,6 @@
         android:textOn="@string/eraseOn" />
 
     <Button
-        android:text="color"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonColor"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/buttonClear"
-        android:layout_toEndOf="@+id/buttonClear" />
-
-    <Button
         android:text="size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,5 +51,14 @@
         android:id="@+id/buttonBrushSize"
         android:layout_alignBottom="@+id/drawingView"
         android:layout_toRightOf="@+id/toggleErase" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonColor"
+        android:minWidth="48dip"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@+id/buttonClear"
+        android:layout_toEndOf="@+id/buttonClear" />
 
 </RelativeLayout>

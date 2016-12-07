@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonClear.setOnClickListener(this);
 
         buttonColor = (Button) findViewById(R.id.buttonColor);
+        buttonColor.setBackgroundColor(Color.BLACK);
         buttonColor.setOnClickListener(this);
 
         buttonBrushSize = (Button) findViewById(R.id.buttonBrushSize);
@@ -61,12 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.buttonClear:
-                drawingView.clearCanvas();
-                drawingView.invalidate();
-                if(toggleErase.isChecked()) {
-                    drawingView.setPaintColor(selectedColorRGB);
-                    toggleErase.setChecked(false);
-                }
+                ShowConfirmClearDialog();
                 break;
             case R.id.buttonColor:
                 colorPicker.show();
@@ -79,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         selectedColorRGB = colorPicker.getColor();
                         Log.i("INFO", "The selected color is: " + selectedColorRGB);
                         drawingView.setPaintColor(selectedColorRGB);
+                        buttonColor.setBackgroundColor(selectedColorRGB);
                         if(toggleErase.isChecked()) {
                             toggleErase.setChecked(false);
                         }
@@ -97,11 +94,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.buttonBrushSize:
-                ShowDialog();
+                ShowSizeDialog();
         }
     }
 
-    public void ShowDialog()
+    public void ShowConfirmClearDialog() {
+        final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
+        //popDialog.setIcon(android.R.drawable.btn_star_big_on);
+        popDialog.setTitle("Confirm");
+        popDialog.setMessage("Are you sure you want to clear the screen?");
+
+        // Button OK
+        popDialog.setPositiveButton("Okay",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // clear the canvas
+                        drawingView.clearCanvas();
+                        // invalidate to force it to redraw
+                        drawingView.invalidate();
+                        if(toggleErase.isChecked()) {
+                            drawingView.setPaintColor(selectedColorRGB);
+                            toggleErase.setChecked(false);
+                        }
+                    }
+
+                });
+        // Button Not OK
+        popDialog.setNegativeButton("Not Okay",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // dismiss the dialog
+                        dialog.dismiss();
+                    }
+                });
+
+
+        popDialog.create();
+        popDialog.show();
+    }
+
+    public void ShowSizeDialog()
     {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
         final SeekBar seek = new SeekBar(this);
@@ -115,18 +147,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser){
                 //Do something here with new value
-                Log.i("INFO", "Progress is " + progress);
+                //Log.i("INFO", "Progress is " + progress);
                 brushSize = progress;
             }
-
             public void onStartTrackingTouch(SeekBar arg0) {
                 // TODO Auto-generated method stub
-
             }
-
             public void onStopTrackingTouch(SeekBar seekBar) {
                 // TODO Auto-generated method stub
-
             }
         });
 
