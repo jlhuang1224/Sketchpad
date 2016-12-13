@@ -1,27 +1,33 @@
 package homework.cisc.mlgdev.com.sketchpad;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 /**
  * Created by Logan Garrett on 12/6/2016.
  */
 
-public class DrawingView extends View {
+public class DrawingView extends ImageView {
 
     private Path drawPath;
     private Paint drawPaint, canvasPaint;
     private int paintColor = 0xFF000000;
     private Canvas canvas;
     private Bitmap bitmap;
+
+    public boolean isErasing;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -42,6 +48,8 @@ public class DrawingView extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
+
+        isErasing = false;
     }
 
     public void setBrushSize(int newSize) {
@@ -53,22 +61,30 @@ public class DrawingView extends View {
     }
 
     public void clearCanvas() {
-        canvas.drawColor(Color.WHITE);
+        bitmap = Bitmap.createBitmap(getScreenWidth(), getScreenHeight(), Bitmap.Config.ARGB_4444);
+        canvas.setBitmap(bitmap);
+        canvas.drawColor(Color.TRANSPARENT);
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
         canvas = new Canvas(bitmap);
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(Color.TRANSPARENT);
         Log.i("INFO", "canvas has been instantiated");
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
+        if(isErasing) {
+            drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        }
+        else {
+            drawPaint.setXfermode(null);
+        }
         canvas.drawPath(drawPath, drawPaint);
     }
 
@@ -94,5 +110,13 @@ public class DrawingView extends View {
         }
         invalidate();
         return true;
+    }
+
+    public static int getScreenWidth() {
+        return Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public static int getScreenHeight() {
+        return Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 }

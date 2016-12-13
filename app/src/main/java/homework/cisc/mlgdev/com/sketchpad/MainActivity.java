@@ -1,14 +1,17 @@
 package homework.cisc.mlgdev.com.sketchpad;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
@@ -16,9 +19,14 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    // image view for photo
+    ImageView ivCamera;
+
     DrawingView drawingView;
 
-    Button buttonClear, buttonColor, buttonBrushSize;
+    Button buttonClear, buttonColor, buttonBrushSize, buttonCamera;
 
     ToggleButton toggleErase;
 
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         drawingView = (DrawingView) findViewById(R.id.drawingView);
+        drawingView.setBackgroundColor(Color.TRANSPARENT);
 
         buttonClear = (Button) findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
@@ -47,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonBrushSize = (Button) findViewById(R.id.buttonBrushSize);
         buttonBrushSize.setOnClickListener(this);
+
+        buttonCamera = (Button) findViewById(R.id.buttonCamera);
+        buttonCamera.setOnClickListener(this);
+
+        ivCamera = (ImageView) findViewById(R.id.ivCamera);
 
         toggleErase = (ToggleButton) findViewById(R.id.toggleErase);
         toggleErase.setOnClickListener(this);
@@ -87,16 +101,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.toggleErase:
                 if(toggleErase.isChecked()) {
                     Log.i("INFO", "We are erasing now.");
-                    drawingView.setPaintColor(Color.WHITE);
+                    drawingView.isErasing = true;
                 } else {
                     Log.i("INFO", "We have stopped erasing.");
-                    drawingView.setPaintColor(selectedColorRGB);
+                    drawingView.isErasing = false;
                 }
                 break;
             case R.id.buttonBrushSize:
                 ShowSizeDialog();
+                break;
+            case R.id.buttonCamera:
+                dispatchTakePictureIntent();
         }
     }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ivCamera.setImageBitmap(imageBitmap);
+        }
+    }
+
 
     public void ShowConfirmClearDialog() {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
@@ -110,10 +144,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         // clear the canvas
                         drawingView.clearCanvas();
+                        ivCamera.setImageBitmap(null);
                         // invalidate to force it to redraw
                         drawingView.invalidate();
                         if(toggleErase.isChecked()) {
-                            drawingView.setPaintColor(selectedColorRGB);
+                            drawingView.isErasing = false;
                             toggleErase.setChecked(false);
                         }
                     }
