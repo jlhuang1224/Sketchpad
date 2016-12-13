@@ -2,4 +2,5 @@
     <string name="app_name">Sketchpad</string>
     <string name="eraseOn">erase</string>
     <string name="eraseOff">erase</string>
+    <string name="chooseaction">Choose Action:</string>
 </resources>

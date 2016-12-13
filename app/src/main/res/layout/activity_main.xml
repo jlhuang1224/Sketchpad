@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -10,6 +11,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="homework.cisc.mlgdev.com.sketchpad.MainActivity"
     android:background="@android:color/white">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/ivCamera" />
 
     <homework.cisc.mlgdev.com.sketchpad.DrawingView
         android:layout_width="match_parent"

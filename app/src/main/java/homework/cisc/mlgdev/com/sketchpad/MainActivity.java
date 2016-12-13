@@ -2,6 +2,7 @@ package homework.cisc.mlgdev.com.sketchpad;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
@@ -18,6 +20,9 @@ import com.pes.androidmaterialcolorpickerdialog.ColorPicker;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+
+    // image view for photo
+    ImageView ivCamera;
 
     DrawingView drawingView;
 
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonCamera = (Button) findViewById(R.id.buttonCamera);
         buttonCamera.setOnClickListener(this);
+
+        ivCamera = (ImageView) findViewById(R.id.ivCamera);
 
         toggleErase = (ToggleButton) findViewById(R.id.toggleErase);
         toggleErase.setOnClickListener(this);
@@ -104,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.buttonCamera:
                 dispatchTakePictureIntent();
-                break;
         }
     }
 
@@ -114,6 +120,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ivCamera.setImageBitmap(imageBitmap);
+        }
+    }
+
 
     public void ShowConfirmClearDialog() {
         final AlertDialog.Builder popDialog = new AlertDialog.Builder(this);
