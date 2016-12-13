@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         drawingView = (DrawingView) findViewById(R.id.drawingView);
+        drawingView.setBackgroundColor(Color.TRANSPARENT);
 
         buttonClear = (Button) findViewById(R.id.buttonClear);
         buttonClear.setOnClickListener(this);
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         // clear the canvas
                         drawingView.clearCanvas();
+                        ivCamera.setImageBitmap(null);
                         // invalidate to force it to redraw
                         drawingView.invalidate();
                         if(toggleErase.isChecked()) {
