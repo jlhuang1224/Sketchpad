@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -24,6 +26,8 @@ public class DrawingView extends ImageView {
     private int paintColor = 0xFF000000;
     private Canvas canvas;
     private Bitmap bitmap;
+
+    public boolean isErasing;
 
     public DrawingView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,6 +48,8 @@ public class DrawingView extends ImageView {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
 
         canvasPaint = new Paint(Paint.DITHER_FLAG);
+
+        isErasing = false;
     }
 
     public void setBrushSize(int newSize) {
@@ -73,6 +79,12 @@ public class DrawingView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, canvasPaint);
+        if(isErasing) {
+            drawPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        }
+        else {
+            drawPaint.setXfermode(null);
+        }
         canvas.drawPath(drawPath, drawPaint);
     }
 

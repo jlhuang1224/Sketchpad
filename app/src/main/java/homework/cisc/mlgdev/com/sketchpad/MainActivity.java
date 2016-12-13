@@ -101,10 +101,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.toggleErase:
                 if(toggleErase.isChecked()) {
                     Log.i("INFO", "We are erasing now.");
-                    drawingView.setPaintColor(Color.WHITE);
+                    drawingView.isErasing = true;
                 } else {
                     Log.i("INFO", "We have stopped erasing.");
-                    drawingView.setPaintColor(selectedColorRGB);
+                    drawingView.isErasing = false;
                 }
                 break;
             case R.id.buttonBrushSize:
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         // invalidate to force it to redraw
                         drawingView.invalidate();
                         if(toggleErase.isChecked()) {
-                            drawingView.setPaintColor(selectedColorRGB);
+                            drawingView.isErasing = false;
                             toggleErase.setChecked(false);
                         }
                     }
