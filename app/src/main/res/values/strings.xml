@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Sketchpad</string>
-    <string name="eraseOn">erase</string>
-    <string name="eraseOff">erase</string>
+    <string name="eraseOn">ERASE</string>
+    <string name="eraseOff">ERASE</string>
     <string name="chooseaction">Choose Action:</string>
 </resources>
